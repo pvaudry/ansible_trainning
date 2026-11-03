@@ -1,0 +1,35 @@
+---
+- name: Setup app environment
+  hosts: all
+  become: true
+
+  vars:
+    app_directory: /app_data
+  
+  tasks:
+    - name: Create directories
+      ansible.builtin.file:
+        path: "{{ app_directory }}"
+        state: directory
+        
+    - name: Create new group app_group
+      ansible.builtin.group:
+        name: app_group
+        state: present
+    
+    - name: Create a new user app_user
+      ansible.builtin.user:
+        name: app_user
+        shell: /bin/bash
+        create_home: yes
+        groups: app_group
+        append: yes
+        state: present
+
+    - name: Configuration of directories permission
+      ansible.builtin.file:
+        path: "{{ app_directory }}"
+        state: directory
+        owner: app_user
+        group: app_group
+        mode: '0744'

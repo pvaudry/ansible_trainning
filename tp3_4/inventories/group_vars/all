@@ -1,0 +1,4 @@
+app_directories:
+  - /app_data
+  - /app_logs
+  - /app_config
